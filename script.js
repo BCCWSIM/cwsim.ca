@@ -35,22 +35,10 @@ document.addEventListener('DOMContentLoaded', () => {
         return csvData.split('\n')
             .filter(row => row.trim().length > 0)
             .map(row => {
-                const cells = row.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g);
-                if (cells) {
-                    return cells.map(cell => transformThumbnailLink(cell.replace(/^"|"$/g, '').trim().replace(/\r?\n|\r/g, ' ')));
-                }
-                return [];
+                // Split by comma and trim each cell
+                const cells = row.split(',').map(cell => cell.trim());
+                return cells;
             });
-    }
-
-    function transformThumbnailLink(url) {
-        const regex = /https:\/\/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)\/view\?usp=drive_link/;
-        const match = url.match(regex);
-        if (match) {
-            const fileId = match[1];
-            return `https://lh3.googleusercontent.com/d/${fileId}`;
-        }
-        return url; // Return the original URL if it doesn't match the pattern
     }
 
     function initializeIndices(requiredHeaders) {
@@ -130,7 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
         items.slice(1).forEach(item => {
             const sku = item[indices['SKU']];
             const skuVar = item[indices['SKUVAR']];
-            const quantityLimit = item[indices['QuantityLimit']].trim() === 'True';
+            const quantityLimit = item[indices['QuantityLimit']].trim() === 'TRUE'; // Case sensitive
             const categoryMatch = selectedCategory === 'All' || item[indices['Category']] === selectedCategory;
             const subcategoryMatch = selectedSubcategory === 'All' || item[indices['SubCategory']] === selectedSubcategory;
 
@@ -139,7 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (!skuGroups.has(key)) {
                     skuGroups.set(key, {
                         count: 1,
-                        skuName: item[indices['SKUName']], // Check this index
+                        skuName: item[indices['SKUName']], // Ensure this index is correct
                         imageUrl: item[0],
                         quantityLimit,
                         sku
