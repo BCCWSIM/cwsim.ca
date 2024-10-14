@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let headers, indices = {};
 
     // Fetch and parse CSV data
-    fetch('https://docs.google.com/spreadsheets/d/e/2PACX-1vTLwQLbqL0fuco7nsIr7wLUBwvj9XWAy0QAG6wN8SJ2rpqWGCseG5uMtMVqCnDZBNQLAW56uk8siPP1/pub?output=csv')
+    fetch('https://docs.google.com/spreadsheets/d/e/2PACX-1vT5qcq-QHtDeJHajLkcTHSwI5JsJndZotORtxyBjt1u1VLqOdLZx94RKdda1c064dUd0TBxRQAeippH/pub?output=csv')
         .then(response => response.text())
         .then(csvData => {
             items = parseCSV(csvData);
