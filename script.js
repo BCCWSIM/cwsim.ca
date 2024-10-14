@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return csvData.split('\n')
             .filter(row => row.trim().length > 0)
             .map(row => row.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g)
-            .map(cell => transformThumbnailLink(cell.replace(/^"|"$/g, '').trim())));
+            .map(cell => transformThumbnailLink(cell.replace(/^"|"$/g, '').trim().replace(/\r?\n|\r/g, ' '))));
     }
 
     function transformThumbnailLink(url) {
