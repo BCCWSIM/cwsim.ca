@@ -34,8 +34,13 @@ document.addEventListener('DOMContentLoaded', () => {
     function parseCSV(csvData) {
         return csvData.split('\n')
             .filter(row => row.trim().length > 0)
-            .map(row => row.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g)
-            .map(cell => transformThumbnailLink(cell.replace(/^"|"$/g, '').trim().replace(/\r?\n|\r/g, ' '))));
+            .map(row => {
+                const cells = row.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g);
+                if (cells) {
+                    return cells.map(cell => transformThumbnailLink(cell.replace(/^"|"$/g, '').trim().replace(/\r?\n|\r/g, ' ')));
+                }
+                return [];
+            });
     }
 
     function transformThumbnailLink(url) {
@@ -134,7 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (!skuGroups.has(key)) {
                     skuGroups.set(key, {
                         count: 1,
-                        skuName: item[indices['SKUName']],
+                        skuName: item[indices['SKUName']], // Check this index
                         imageUrl: item[0],
                         quantityLimit,
                         sku
