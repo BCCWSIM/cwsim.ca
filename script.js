@@ -35,6 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return csvData.split('\n')
             .filter(row => row.trim().length > 0)
             .map(row => {
+                // Split by comma and trim each cell
                 const cells = row.split(',').map(cell => cell.trim());
                 return cells;
             });
@@ -117,7 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
         items.slice(1).forEach(item => {
             const sku = item[indices['SKU']];
             const skuVar = item[indices['SKUVAR']];
-            const quantityLimit = item[indices['QuantityLimit']].trim() === 'TRUE';
+            const quantityLimit = item[indices['QuantityLimit']].trim() === 'TRUE'; // Case sensitive
             const categoryMatch = selectedCategory === 'All' || item[indices['Category']] === selectedCategory;
             const subcategoryMatch = selectedSubcategory === 'All' || item[indices['SubCategory']] === selectedSubcategory;
 
@@ -126,11 +127,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (!skuGroups.has(key)) {
                     skuGroups.set(key, {
                         count: 1,
-                        skuName: item[indices['SKUName']],
+                        skuName: item[indices['SKUName']], // Ensure this index is correct
                         imageUrl: item[0],
                         quantityLimit,
-                        sku,
-                        skuVar
+                        sku
                     });
                 } else {
                     skuGroups.get(key).count++;
@@ -138,8 +138,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        skuGroups.forEach(({ count, skuName, imageUrl, sku, quantityLimit, skuVar }) => {
-            const div = createCard(skuName, count, imageUrl, sku, quantityLimit, skuVar);
+        skuGroups.forEach(({ count, skuName, imageUrl, sku, quantityLimit }) => {
+            const div = createCard(skuName, count, imageUrl, sku, quantityLimit);
             gallery.appendChild(div);
             itemCount++;
         });
@@ -147,7 +147,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('itemCount').textContent = ` ${itemCount} Found`;
     }
 
-    function createCard(skuName, skuCount, imageUrl, sku, quantityLimit, skuVar) {
+    function createCard(skuName, skuCount, imageUrl, sku, quantityLimit) {
         const div = document.createElement('div');
         div.classList.add('card');
 
@@ -162,13 +162,13 @@ document.addEventListener('DOMContentLoaded', () => {
             document.body.classList.add('modal-open');
         });
 
-        const contentDiv = createContentDiv(skuName, skuCount, imageUrl, sku, quantityLimit, skuVar);
+        const contentDiv = createContentDiv(skuName, skuCount, imageUrl, sku, quantityLimit);
         div.appendChild(contentDiv);
 
         return div;
     }
 
-    function createContentDiv(skuName, skuCount, imageUrl, sku, quantityLimit, skuVar) {
+    function createContentDiv(skuName, skuCount, imageUrl, sku, quantityLimit) {
         const contentDiv = document.createElement('div');
         contentDiv.style.display = 'flex';
         contentDiv.style.flexDirection = 'column';
@@ -182,14 +182,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const availableCountDiv = document.createElement('div');
         availableCountDiv.classList.add('available-count');
-
-        // Display quantity based on QuantityLimit
         if (quantityLimit) {
-            availableCountDiv.innerHTML = `${skuCount} ${sku} ${skuVar} Available`; // Original message
-        } else if (skuCount > 1) {
-            availableCountDiv.innerHTML = `${skuCount} Available`; // Show available count for non-limited items
+            availableCountDiv.innerHTML = `${skuCount} <br>Available`; 
         }
-
         contentDiv.appendChild(availableCountDiv);
 
         const skuDiv = document.createElement('div');
