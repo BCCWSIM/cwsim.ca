@@ -183,11 +183,11 @@ function createContentDiv(skuName, skuCount, imageUrl, sku, quantityLimit) {
     const availableCountDiv = document.createElement('div');
     availableCountDiv.classList.add('available-count');
 
-    // Display quantity based on QuantityLimit and skuCount
-    if (!quantityLimit && skuCount > 1) {
-        availableCountDiv.innerHTML = `${skuCount} Available`;
-    } else if (quantityLimit) {
+    // Display quantity based on QuantityLimit
+    if (quantityLimit) {
         availableCountDiv.innerHTML = `Limited Availability`;
+    } else if (skuCount > 1) {
+        availableCountDiv.innerHTML = `${skuCount} Available`;
     }
 
     contentDiv.appendChild(availableCountDiv);
@@ -199,6 +199,7 @@ function createContentDiv(skuName, skuCount, imageUrl, sku, quantityLimit) {
 
     return contentDiv;
 }
+
 
 
     function createImage(src) {
