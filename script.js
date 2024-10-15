@@ -168,32 +168,38 @@ document.addEventListener('DOMContentLoaded', () => {
         return div;
     }
 
-    function createContentDiv(skuName, skuCount, imageUrl, sku, quantityLimit) {
-        const contentDiv = document.createElement('div');
-        contentDiv.style.display = 'flex';
-        contentDiv.style.flexDirection = 'column';
+function createContentDiv(skuName, skuCount, imageUrl, sku, quantityLimit) {
+    const contentDiv = document.createElement('div');
+    contentDiv.style.display = 'flex';
+    contentDiv.style.flexDirection = 'column';
 
-        const imageContainer = document.createElement('div');
-        const img = createImage(imageUrl);
-        imageContainer.appendChild(img);
-        contentDiv.appendChild(imageContainer);
+    const imageContainer = document.createElement('div');
+    const img = createImage(imageUrl);
+    imageContainer.appendChild(img);
+    contentDiv.appendChild(imageContainer);
 
-        contentDiv.appendChild(createParagraph(skuName, 'title'));
+    contentDiv.appendChild(createParagraph(skuName, 'title'));
 
-        const availableCountDiv = document.createElement('div');
-        availableCountDiv.classList.add('available-count');
-        if (quantityLimit) {
-            availableCountDiv.innerHTML = `${skuCount} <br>Available`; 
-        }
-        contentDiv.appendChild(availableCountDiv);
+    const availableCountDiv = document.createElement('div');
+    availableCountDiv.classList.add('available-count');
 
-        const skuDiv = document.createElement('div');
-        skuDiv.classList.add('sku');
-        skuDiv.innerHTML = sku; 
-        contentDiv.appendChild(skuDiv);
-
-        return contentDiv;
+    // Display quantity based on QuantityLimit and skuCount
+    if (!quantityLimit && skuCount > 1) {
+        availableCountDiv.innerHTML = `${skuCount} Available`;
+    } else if (quantityLimit) {
+        availableCountDiv.innerHTML = `Limited Availability`;
     }
+
+    contentDiv.appendChild(availableCountDiv);
+
+    const skuDiv = document.createElement('div');
+    skuDiv.classList.add('sku');
+    skuDiv.innerHTML = sku; 
+    contentDiv.appendChild(skuDiv);
+
+    return contentDiv;
+}
+
 
     function createImage(src) {
         const img = document.createElement('img');
