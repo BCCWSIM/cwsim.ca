@@ -182,9 +182,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const availableCountDiv = document.createElement('div');
         availableCountDiv.classList.add('available-count');
-        if (quantityLimit) {
+
+        // Updated logic for available count display
+        if (quantityLimit || skuCount > 1) {
             availableCountDiv.innerHTML = `${skuCount} <br>Available`; 
         }
+        
         contentDiv.appendChild(availableCountDiv);
 
         const skuDiv = document.createElement('div');
