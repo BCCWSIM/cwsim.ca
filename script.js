@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(csvData => {
             items = parseCSV(csvData);
             headers = items[0];
-            initializeIndices(['SKU', 'SKUVAR', 'SKUName', 'QuantityLimit', 'Category', 'SubCategory']);
+            initializeIndices(['SKU', 'SKUVAR', 'SKUName', 'QuantityLimit', 'Quantity', 'Category', 'SubCategory']);
             initializeGallery();
         })
         .catch(error => console.error('Error fetching CSV:', error));
@@ -35,7 +35,6 @@ document.addEventListener('DOMContentLoaded', () => {
         return csvData.split('\n')
             .filter(row => row.trim().length > 0)
             .map(row => {
-                // Split by comma and trim each cell
                 const cells = row.split(',').map(cell => cell.trim());
                 return cells;
             });
@@ -118,7 +117,8 @@ document.addEventListener('DOMContentLoaded', () => {
         items.slice(1).forEach(item => {
             const sku = item[indices['SKU']];
             const skuVar = item[indices['SKUVAR']];
-            const quantityLimit = item[indices['QuantityLimit']].trim() === 'TRUE'; // Case sensitive
+            const quantityLimit = item[indices['QuantityLimit']].trim() === 'FALSE'; // Case sensitive
+            const quantity = parseInt(item[indices['Quantity']]) || 0; // Get quantity from CSV
             const categoryMatch = selectedCategory === 'All' || item[indices['Category']] === selectedCategory;
             const subcategoryMatch = selectedSubcategory === 'All' || item[indices['SubCategory']] === selectedSubcategory;
 
@@ -127,9 +127,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (!skuGroups.has(key)) {
                     skuGroups.set(key, {
                         count: 1,
-                        skuName: item[indices['SKUName']], // Ensure this index is correct
+                        skuName: item[indices['SKUName']],
                         imageUrl: item[0],
                         quantityLimit,
+                        quantity, // Store quantity
                         sku
                     });
                 } else {
@@ -138,8 +139,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        skuGroups.forEach(({ count, skuName, imageUrl, sku, quantityLimit }) => {
-            const div = createCard(skuName, count, imageUrl, sku, quantityLimit);
+        skuGroups.forEach(({ count, skuName, imageUrl, sku, quantityLimit, quantity }) => {
+            const div = createCard(skuName, count, imageUrl, sku, quantityLimit, quantity);
             gallery.appendChild(div);
             itemCount++;
         });
@@ -147,7 +148,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('itemCount').textContent = ` ${itemCount} Found`;
     }
 
-    function createCard(skuName, skuCount, imageUrl, sku, quantityLimit) {
+    function createCard(skuName, skuCount, imageUrl, sku, quantityLimit, quantity) {
         const div = document.createElement('div');
         div.classList.add('card');
 
@@ -162,13 +163,13 @@ document.addEventListener('DOMContentLoaded', () => {
             document.body.classList.add('modal-open');
         });
 
-        const contentDiv = createContentDiv(skuName, skuCount, imageUrl, sku, quantityLimit);
+        const contentDiv = createContentDiv(skuName, skuCount, imageUrl, sku, quantityLimit, quantity);
         div.appendChild(contentDiv);
 
         return div;
     }
 
-    function createContentDiv(skuName, skuCount, imageUrl, sku, quantityLimit) {
+    function createContentDiv(skuName, skuCount, imageUrl, sku, quantityLimit, quantity) {
         const contentDiv = document.createElement('div');
         contentDiv.style.display = 'flex';
         contentDiv.style.flexDirection = 'column';
@@ -183,9 +184,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const availableCountDiv = document.createElement('div');
         availableCountDiv.classList.add('available-count');
 
-        // Updated logic for available count display
-        if (quantityLimit || skuCount > 1) {
-            availableCountDiv.innerHTML = `${skuCount} <br>Available`; 
+        // Check conditions for displaying available count
+        if (!quantityLimit && quantity > 1) {
+            availableCountDiv.innerHTML = `${quantity} <br>Available`; 
+        } else if (quantityLimit) {
+            availableCountDiv.innerHTML = `${skuCount} <br>Available`;
         }
         
         contentDiv.appendChild(availableCountDiv);
