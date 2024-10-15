@@ -11,7 +11,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Close modal function
     function closeModal() {
         modal.style.display = "none";
         document.body.classList.remove('modal-open');
@@ -20,7 +19,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let items = [];
     let headers, indices = {};
 
-    // Fetch and parse CSV data
     fetch('https://docs.google.com/spreadsheets/d/e/2PACX-1vT5qcq-QHtDeJHajLkcTHSwI5JsJndZotORtxyBjt1u1VLqOdLZx94RKdda1c064dUd0TBxRQAeippH/pub?output=csv')
         .then(response => response.text())
         .then(csvData => {
@@ -34,10 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function parseCSV(csvData) {
         return csvData.split('\n')
             .filter(row => row.trim().length > 0)
-            .map(row => {
-                const cells = row.split(',').map(cell => cell.trim());
-                return cells;
-            });
+            .map(row => row.split(',').map(cell => cell.trim()));
     }
 
     function initializeIndices(requiredHeaders) {
@@ -67,7 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
         galleryContainer.appendChild(categorySelect);
         galleryContainer.appendChild(createLabel('SubCategory:', 'subcategorySelect'));
         galleryContainer.appendChild(subcategorySelect);
-        
+
         const resetButton = createResetButton(categorySelect, subcategorySelect);
         galleryContainer.appendChild(resetButton);
 
@@ -117,8 +112,8 @@ document.addEventListener('DOMContentLoaded', () => {
         items.slice(1).forEach(item => {
             const sku = item[indices['SKU']];
             const skuVar = item[indices['SKUVAR']];
-            const quantityLimit = item[indices['QuantityLimit']].trim() === 'TRUE'; // TRUE if QuantityLimit is TRUE
-            const quantity = parseInt(item[indices['Quantity']]) || 0; // Get quantity from CSV
+            const quantityLimit = item[indices['QuantityLimit']].trim() === 'TRUE';
+            const quantity = parseInt(item[indices['Quantity']]) || 0;
             const categoryMatch = selectedCategory === 'All' || item[indices['Category']] === selectedCategory;
             const subcategoryMatch = selectedSubcategory === 'All' || item[indices['SubCategory']] === selectedSubcategory;
 
@@ -130,7 +125,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         skuName: item[indices['SKUName']],
                         imageUrl: item[0],
                         quantityLimit,
-                        quantity, // Store quantity
+                        quantity,
                         sku
                     });
                 } else {
@@ -242,7 +237,6 @@ document.addEventListener('DOMContentLoaded', () => {
         return resetButton;
     }
 
-    // Live search function
     let timeout = null;
     document.getElementById("myInput").addEventListener('input', liveSearch);
 
