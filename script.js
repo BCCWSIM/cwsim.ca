@@ -182,8 +182,8 @@ document.addEventListener('DOMContentLoaded', () => {
         // Check conditions for displaying available count
         if (quantityLimit) {
             availableCountDiv.innerHTML = `${skuCount} <br>Available`; // Show SKU Count if QuantityLimit is TRUE
-        } else if (!quantityLimit && quantity > 1) {
-            availableCountDiv.innerHTML = `${quantity} <br>Available`; // Show Quantity if QuantityLimit is FALSE
+        } else if (!quantityLimit && quantity > 0) {
+            availableCountDiv.innerHTML = `${quantity} <br>Left`; // Show Quantity if QuantityLimit is FALSE
         }
         
         contentDiv.appendChild(availableCountDiv);
