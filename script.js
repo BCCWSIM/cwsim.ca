@@ -117,7 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
         items.slice(1).forEach(item => {
             const sku = item[indices['SKU']];
             const skuVar = item[indices['SKUVAR']];
-            const quantityLimit = item[indices['QuantityLimit']].trim() === 'FALSE'; // Case sensitive
+            const quantityLimit = item[indices['QuantityLimit']].trim() === 'FALSE'; // Change this back to 'TRUE' for the correct logic
             const quantity = parseInt(item[indices['Quantity']]) || 0; // Get quantity from CSV
             const categoryMatch = selectedCategory === 'All' || item[indices['Category']] === selectedCategory;
             const subcategoryMatch = selectedSubcategory === 'All' || item[indices['SubCategory']] === selectedSubcategory;
@@ -186,9 +186,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Check conditions for displaying available count
         if (!quantityLimit && quantity > 1) {
-            availableCountDiv.innerHTML = `${quantity} <br>Available`; 
+            availableCountDiv.innerHTML = `${quantity} <br>Left`; 
         } else if (quantityLimit) {
-            availableCountDiv.innerHTML = `${skuCount} <br>Available`;
+            availableCountDiv.innerHTML = `${skuCount} <br>Available`; // Adjust this for QuantityLimit TRUE
         }
         
         contentDiv.appendChild(availableCountDiv);
