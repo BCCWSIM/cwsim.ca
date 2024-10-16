@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
             items = parseCSV(csvData);
             console.log("Parsed items:", items); // Log parsed items
             headers = items[0];
-            initializeIndices(['SKU', 'SKUVAR', 'SKUName', 'QuantityLimit', 'Quantity', 'Category', 'SubCategory']);
+            initializeIndices(['Thumbnails', 'Title', 'Quantity', 'SKU', 'Category', 'SubCategory', 'SKUVAR', 'SKUName', 'QuantityLimit']);
             initializeGallery();
         })
         .catch(error => console.error('Error fetching CSV:', error));
@@ -108,7 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let itemCount = 0;
 
         const skuGroups = new Map();
-        const defaultImageUrl = 'https://lh3.googleusercontent.com/d/12bSAqqLcuxVSt_HGtaGZuS0VuLtoB6X5';
+        const defaultImageUrl = 'https://lh3.googleusercontent.com/d/12bSAqqLcuxVSt_HGtaGZuS0VuLtoB6X5'; // Placeholder image
 
         items.slice(1).forEach(item => {
             const sku = item[indices['SKU']];
@@ -121,7 +121,9 @@ document.addEventListener('DOMContentLoaded', () => {
             if (categoryMatch && subcategoryMatch) {
                 const key = `${sku}-${skuVar}`;
                 if (!skuGroups.has(key)) {
-                    const imageUrl = item[0] && item[0].trim() !== '' ? item[0] : defaultImageUrl; // Check for thumbnail URL
+                    const imageUrl = item[indices['Thumbnails']] && item[indices['Thumbnails']].trim() !== '' 
+                                     ? item[indices['Thumbnails']] 
+                                     : defaultImageUrl; // Use default image if thumbnail is missing
                     skuGroups.set(key, {
                         count: 1,
                         skuName: item[indices['SKUName']],
@@ -135,10 +137,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
         });
-
-        if (skuGroups.size === 0) {
-            console.log("No items found for the selected filters."); // Log if no items are found
-        }
 
         skuGroups.forEach(({ count, skuName, imageUrl, sku, quantityLimit, quantity }) => {
             const div = createCard(skuName, count, imageUrl, sku, quantityLimit, quantity);
