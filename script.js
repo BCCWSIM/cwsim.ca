@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // Modal initialization
     const modal = document.getElementById("myModal");
     const closeModalButton = modal.querySelector(".close");
     modal.style.display = "none";
@@ -22,7 +23,6 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(response => response.text())
         .then(csvData => {
             items = parseCSV(csvData);
-            console.log("Parsed items:", items); // Log parsed items
             headers = items[0];
             initializeIndices(['Thumbnails', 'Title', 'Quantity', 'SKU', 'Category', 'SubCategory', 'SKUVAR', 'SKUName', 'QuantityLimit']);
             initializeGallery();
@@ -108,22 +108,23 @@ document.addEventListener('DOMContentLoaded', () => {
         let itemCount = 0;
 
         const skuGroups = new Map();
-        const defaultImageUrl = 'https://lh3.googleusercontent.com/d/12bSAqqLcuxVSt_HGtaGZuS0VuLtoB6X5'; // Placeholder image
+        const defaultImageUrl = 'https://lh3.googleusercontent.com/d/12bSAqqLcuxVSt_HGtaGZuS0VuLtoB6X5';
 
         items.slice(1).forEach(item => {
             const sku = item[indices['SKU']];
             const skuVar = item[indices['SKUVAR']];
-            const quantityLimit = item[indices['QuantityLimit']].trim() === 'True';
+            const quantityLimit = item[indices['QuantityLimit']].trim().toLowerCase() === 'true';
             const quantity = parseInt(item[indices['Quantity']]) || 0;
             const categoryMatch = selectedCategory === 'All' || item[indices['Category']] === selectedCategory;
             const subcategoryMatch = selectedSubcategory === 'All' || item[indices['SubCategory']] === selectedSubcategory;
 
             if (categoryMatch && subcategoryMatch) {
+                const imageUrl = item[indices['Thumbnails']] && item[indices['Thumbnails']].trim() !== ''
+                    ? item[indices['Thumbnails']]
+                    : defaultImageUrl;
+
                 const key = `${sku}-${skuVar}`;
                 if (!skuGroups.has(key)) {
-                    const imageUrl = item[indices['Thumbnails']] && item[indices['Thumbnails']].trim() !== '' 
-                                     ? item[indices['Thumbnails']] 
-                                     : defaultImageUrl; // Use default image if thumbnail is missing
                     skuGroups.set(key, {
                         count: 1,
                         skuName: item[indices['SKUName']],
@@ -155,7 +156,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const modalImg = document.getElementById("img01");
             const captionText = document.getElementById("caption");
 
-            modal.style.display = "block"; 
+            modal.style.display = "block";
             modalImg.src = imageUrl;
             captionText.innerHTML = skuName;
 
@@ -188,12 +189,12 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (!quantityLimit && quantity > 0) {
             availableCountDiv.innerHTML = `${quantity} <br>Left`;
         }
-        
+
         contentDiv.appendChild(availableCountDiv);
 
         const skuDiv = document.createElement('div');
         skuDiv.classList.add('sku');
-        skuDiv.innerHTML = sku; 
+        skuDiv.innerHTML = sku;
         contentDiv.appendChild(skuDiv);
 
         return contentDiv;
