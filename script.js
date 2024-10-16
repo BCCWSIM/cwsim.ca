@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Modal initialization
     const modal = document.getElementById("myModal");
     const closeModalButton = modal.querySelector(".close");
     modal.style.display = "none";
@@ -23,6 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(response => response.text())
         .then(csvData => {
             items = parseCSV(csvData);
+            console.log("Parsed items:", items); // Log parsed items
             headers = items[0];
             initializeIndices(['SKU', 'SKUVAR', 'SKUName', 'QuantityLimit', 'Quantity', 'Category', 'SubCategory']);
             initializeGallery();
@@ -136,6 +136,10 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
+        if (skuGroups.size === 0) {
+            console.log("No items found for the selected filters."); // Log if no items are found
+        }
+
         skuGroups.forEach(({ count, skuName, imageUrl, sku, quantityLimit, quantity }) => {
             const div = createCard(skuName, count, imageUrl, sku, quantityLimit, quantity);
             gallery.appendChild(div);
@@ -181,7 +185,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const availableCountDiv = document.createElement('div');
         availableCountDiv.classList.add('available-count');
 
-        // Check conditions for displaying available count
         if (quantityLimit) {
             availableCountDiv.innerHTML = `${skuCount} <br>Available`;
         } else if (!quantityLimit && quantity > 0) {
@@ -232,8 +235,8 @@ document.addEventListener('DOMContentLoaded', () => {
         resetButton.textContent = 'Reset';
         resetButton.addEventListener('click', () => {
             categorySelect.value = 'All';
-            subcategorySelect.value = 'All'; // Reset subcategory to 'All'
-            filterSubcategories(subcategorySelect, 'All'); // Re-filter subcategories
+            subcategorySelect.value = 'All';
+            filterSubcategories(subcategorySelect, 'All');
             displayGallery();
         });
         return resetButton;
