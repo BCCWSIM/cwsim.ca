@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SimHub</title>
+
+    <style>
+        /* General Styles */
+        html {
+            height: 100%;
+            font-family: "Inconsolata", "Arial", sans-serif;
+            text-align: center;
+            background: #EDEDED;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        /* Chart Container */
+        .chart-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 20px;
+        }
+
+        /* Info Bar Styles */
+        .info-bar {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), 0 6px 20px rgba(0, 0, 0, 0.19);
+            font-size: 18px;  
+            color: #333;
+            display: flex;  
+            flex-direction: column;  
+            align-items: center;  
+            width: 100%;
+            max-width: 900px;
+            user-select: none; 
+            cursor: pointer;
+        }
+
+        /* Heading and Paragraph Styles */
+        .info-bar h3 {
+            margin: 0;
+            font-size: 22px;  
+            font-weight: bold;
+            color: #1976d2;  
+        }
+
+        .info-bar p {
+            margin: 5px 0;
+            font-size: 20px;  
+            font-weight: bold;  
+        }
+
+        .info-bar p#next-item-id,
+        .info-bar p#next-item-name {
+            font-size: 24px;  
+        }
+
+        .info-bar p#next-item-id {
+            color: orange;  
+        }
+
+        .info-bar p#next-item-name {
+            color: black;  
+        }
+
+        /* Image Container */
+        .info-bar .image-container {
+            display: flex; 
+            justify-content: center; 
+            gap: 10px; 
+            margin-top: 10px;
+        }
+
+        .info-bar img {
+            max-width: 200px;  
+            height: 300px;
+            object-fit: contain;  
+            border-radius: 8px; 
+        }
+
+        /* Search Box */
+        .search-box {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            width: 60%;
+            max-width: 300px;
+            font-size: 16px;
+        }
+
+        /* Chart Styles */
+        .bar {
+            fill: steelblue;
+            stroke: none;
+        }
+
+        .axis text {
+            font: 10px sans-serif;
+        }
+
+        /* SVG Styles */
+        svg {
+            display: block; 
+            margin: 0 auto; 
+            max-width: 800px; /* Limit the width of the chart */
+            width: 100%; /* Make it responsive within the max width */
+        }
+    </style>
+</head>
+<body>
+<iframe width="800" height="600" src="https://apps.powerapps.com/play/9f2a239c-ada3-485e-8453-b8631fbb03b4?source=iframe" allow="geolocation; microphone; camera"></iframe>
+    </div>
+
+</body>
+</html>
