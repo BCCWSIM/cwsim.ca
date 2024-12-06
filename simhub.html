@@ -26,11 +26,12 @@
         }
 
         /* Chart Container */
-        .chart-container {
+        .iframe-container {
             display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin: 20px;
+            justify-content: space-between;
+            gap: 20px; /* Space between iframes */
+            flex-wrap: wrap; /* To make them responsive */
+            margin: 20px 0;
         }
 
         /* Info Bar Styles */
@@ -121,13 +122,18 @@
             max-width: 800px; /* Limit the width of the chart */
             width: 100%; /* Make it responsive within the max width */
         }
+
+        /* Make iframe responsive */
+        iframe {
+            width: 48%; /* Take up 48% of the width for each iframe */
+            height: 600px; /* Set fixed height for both iframes */
+        }
     </style>
 </head>
 <body>
-<iframe width="100%" height="1000" src="https://apps.powerapps.com/play/b62cf269-ba81-4122-a450-c27cd6654cce?source=iframe" allow="geolocation; microphone; camera"></iframe>
+    <div class="iframe-container">
+        <iframe src="https://apps.powerapps.com/play/b62cf269-ba81-4122-a450-c27cd6654cce?source=iframe" allow="geolocation; microphone; camera"></iframe>
+        <iframe src="https://apps.powerapps.com/play/9f2a239c-ada3-485e-8453-b8631fbb03b4?source=iframe" allow="geolocation; microphone; camera"></iframe>
     </div>
-    <iframe width="800" height="600" src="https://apps.powerapps.com/play/9f2a239c-ada3-485e-8453-b8631fbb03b4?source=iframe" allow="geolocation; microphone; camera"></iframe>
-    </div>
-
 </body>
 </html>
